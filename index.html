@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Егор Кочедыков | Fullstack разработчик</title>
+    <style>
+        :root {
+            --primary: #6e48aa;
+            --secondary: #9d50bb;
+            --accent: #4776E6;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --danger: #F44336;
+            --code-bg: #282a36;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        @font-face {
+            font-family: 'Fira Code';
+            src: url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(110, 72, 170, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(157, 80, 187, 0.15) 0%, transparent 20%);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--accent) }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 2rem 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            width: 30px;
+            height: 20px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .hamburger span {
+            display: block;
+            position: absolute;
+            height: 3px;
+            width: 100%;
+            background: var(--light);
+            border-radius: 3px;
+            opacity: 1;
+            left: 0;
+            transform: rotate(0deg);
+            transition: .25s ease-in-out;
+        }
+
+        .hamburger span:nth-child(1) {
+            top: 0px;
+        }
+
+        .hamburger span:nth-child(2), .hamburger span:nth-child(3) {
+            top: 10px;
+        }
+
+        .hamburger span:nth-child(4) {
+            top: 20px;
+        }
+
+        .hamburger.open span:nth-child(1) {
+            top: 10px;
+            width: 0%;
+            left: 50%;
+        }
+
+        .hamburger.open span:nth-child(2) {
+            transform: rotate(45deg);
+        }
+
+        .hamburger.open span:nth-child(3) {
+            transform: rotate(-45deg);
+        }
+
+        .hamburger.open span:nth-child(4) {
+            top: 10px;
+            width: 0%;
+            left: 50%;
+        }
+
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 4rem 0;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-title span {
+            color: var(--accent);
+            position: relative;
+        }
+
+        .hero-title span::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+        }
+
+        .typing-text {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.8);
+            border-right: 2px solid var(--accent);
+            white-space: nowrap;
+            overflow: hidden;
+            animation: 
+                typing 3.5s steps(40, end),
+                blink-caret .75s step-end infinite;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(110, 72, 170, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(110, 72, 170, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+
+        .btn:hover::after {
+            opacity: 1;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            box-shadow: none;
+            margin-left: 1rem;
+        }
+
+        .btn-outline:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+            background-size: cover;
+            opacity: 0.7;
+            filter: grayscale(30%) contrast(1.2) brightness(0.5);
+            z-index: 1;
+        }
+
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--dark), transparent 70%);
+        }
+
+        .section {
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            width: 100%;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .about-image {
+            flex: 1;
+            position: relative;
+            min-height: 400px;
+        }
+
+        .code-window {
+            background: var(--code-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .window-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .window-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .window-btn.red {
+            background: #FF5F56;
+        }
+
+        .window-btn.yellow {
+            background: #FFBD2E;
+        }
+
+        .window-btn.green {
+            background: #27C93F;
+        }
+
+        .window-title {
+            flex: 1;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+        }
+
+        .code {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+
+        .code .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+
+        .code .keyword {
+            color: #ff79c6;
+        }
+
+        .code .function {
+            color: #50fa7b;
+        }
+
+        .code .string {
+            color: #f1fa8c;
+        }
+
+        .code .variable {
+            color: #bd93f9;
+        }
+
+        .code .operator {
+            color: #ff79c6;
+        }
+
+        .code .number {
+            color: #bd93f9;
+        }
+
+        .code .constant {
+            color: #bd93f9;
+        }
+
+        .services {
+            background: rgba(26, 26, 46, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: rgba(40, 42, 54, 0.6);
+            border-radius: 10px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(110, 72, 170, 0.3);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(110, 72, 170, 0.2);
+            border-color: rgba(110, 72, 170, 0.6);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(110, 72, 170, 0.1), transparent);
+            z-index: -1;
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+
+        .service-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-tag {
+            background: rgba(110, 72, 170, 0.2);
+            color: var(--light);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(110, 72, 170, 0.5);
+        }
+
+        .tech-section {
+            text-align: center;
+        }
+
+        .tech-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .tech-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+
+        .tech-item:hover {
+            transform: scale(1.1);
+        }
+
+        .tech-icon {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+            filter: grayscale(30%) brightness(0.8);
+            transition: filter 0.3s;
+        }
+
+        .tech-item:hover .tech-icon {
+            filter: grayscale(0%) brightness(1.1);
+        }
+
+        .tech-item:nth-child(4) .tech-icon {
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .tech-name {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .projects-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-item .service-tech {
+            margin-bottom: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .project-item {
+            background: rgba(40, 42, 54, 0.6);
+            border-radius: 10px;
+            padding: 2rem;
+            border: 1px solid rgba(110, 72, 170, 0.3);
+            transition: all 0.3s;
+        }
+
+        .project-item:hover {
+            border-color: rgba(110, 72, 170, 0.6);
+            transform: translateY(-5px);
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .project-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-card {
+            background: rgba(40, 42, 54, 0.6);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(110, 72, 170, 0.3);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(110, 72, 170, 0.2);
+            border-color: rgba(110, 72, 170, 0.6);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(110, 72, 170, 0.3);
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .project-link:hover {
+            color: var(--secondary);
+        }
+
+        .project-link i {
+            font-size: 1.2rem;
+        }
+
+        .contact-section {
+            text-align: center;
+        }
+
+        .contact-methods {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-card {
+            background: rgba(40, 42, 54, 0.6);
+            border-radius: 10px;
+            padding: 2rem;
+            width: 250px;
+            transition: transform 0.3s;
+            border: 1px solid rgba(110, 72, 170, 0.3);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(110, 72, 170, 0.6);
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .contact-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .contact-link {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-link:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        footer {
+            background: rgba(26, 26, 46, 0.8);
+            padding: 3rem 0;
+            text-align: center;
+            margin-top: 5rem;
+            position: relative;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: var(--accent);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .easter-egg {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(71, 118, 230, 0.4);
+            z-index: 100;
+            transition: all 0.3s;
+        }
+
+        .easter-egg:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(71, 118, 230, 0.6);
+        }
+
+        .easter-egg i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            background: var(--dark);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            white-space: nowrap;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .easter-egg:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .about-image {
+                width: 100%;
+                min-height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: var(--dark);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 2rem;
+                transition: right 0.3s;
+                z-index: 90;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .hero {
+                padding: 2rem 0;
+                text-align: center;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+            }
+            
+            .hero-bg {
+                opacity: 0.3;
+            }
+
+            .hero-bg::before {
+                background: linear-gradient(90deg, var(--dark), transparent 90%);
+            }
+            
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .btn-outline {
+                margin-left: 0;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .typing-text {
+                font-size: 1rem;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-methods {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="nav">
+                <a href="#" class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" fill="none"/>
+                    </svg>
+                    Kochedykov-dev<span>.ru</span>
+                </a>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="nav-links">
+                    <a href="#about">Обо мне</a>
+                    <a href="#services">Услуги</a>
+                    <a href="#projects">Проекты</a>
+                    <a href="#contact">Контакты</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Привет, я Егор <span>Кочедыков</span></h1>
+                <div class="typing-text">Fullstack разработчик с 3-летним опытом</div>
+                <p class="hero-description">
+                    Специализируюсь на создании современных веб-приложений, Telegram ботов и автоматизации бизнес-процессов. 
+                    Люблю чистый код, эффективные решения и сложные задачи.
+                </p>
+                <div class="btn-group">
+                    <a href="#projects" class="btn">Мои работы</a>
+                    <a href="#contact" class="btn btn-outline">Связаться</a>
+                </div>
+            </div>
+            <div class="hero-bg"></div>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">Обо мне</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        Я студент института на специальности "Программная инженерия" с 3-летним опытом коммерческой разработки. 
+                        Начинал с вёрстки сайтов, затем перешёл на JavaScript и погрузился в мир fullstack разработки.
+                    </p>
+                    <p>
+                        Я помогаю бизнесу решать реальные задачи с помощью современных веб-решений и умной автоматизации.
+                        Вместо шаблонных решений «для галочки» я создаю инструменты, которые экономят время, ресурсы
+                        и открывают новые возможности для роста. Особое внимание уделяю производительности,
+                        удобству использования и масштабируемости вашего цифрового продукта.
+                    </p>
+                    <p>
+                        В свободное время люблю изучать новые технологии, и 
+                        разрабатывать pet-проекты для автоматизации повседневных задач.
+                    </p>
+                    <div class="services">
+                        <h3>Технологический стек:</h3>
+                        <div class="service-tech">
+                            <span class="tech-tag">TypeScript</span>
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">Node.js</span>
+                            <span class="tech-tag">Express</span>
+                            <span class="tech-tag">Fastify</span>
+                            <span class="tech-tag">MongoDB</span>
+                            <span class="tech-tag">Telegram API</span>
+                            <span class="tech-tag">1С</span>
+                            <span class="tech-tag">VK API</span>
+                            <span class="tech-tag">ИИ интеграции</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+    <div class="code-window">
+        <div class="window-header">
+            <div class="window-btn red"></div>
+            <div class="window-btn yellow"></div>
+            <div class="window-btn green"></div>
+            <div class="window-title">profile.ts</div>
+        </div>
+        <pre class="code"><span class="keyword">interface</span> <span class="variable">Developer</span> {
+    <span class="variable">name</span>: <span class="string">string</span>;
+    <span class="variable">role</span>: <span class="string">'Fullstack'</span> | <span class="string">'Backend'</span> | <span class="string">'Frontend'</span>;
+    <span class="variable">skills</span>: {
+        <span class="variable">frontend</span>: <span class="string">string</span>[];
+        <span class="variable">backend</span>: <span class="string">string</span>[];
+        <span class="variable">tools</span>: <span class="string">string</span>[];
+    };
+    <span class="variable">experience</span>: <span class="variable">number</span>;
+}
+
+<span class="keyword">const</span> <span class="variable">me</span>: <span class="variable">Developer</span> = {
+    <span class="variable">name</span>: <span class="string">'Егор Кочедыков'</span>,
+    <span class="variable">role</span>: <span class="string">'Fullstack'</span>,
+    <span class="variable">skills</span>: {
+        <span class="variable">frontend</span>: [<span class="string">'React'</span>, <span class="string">'TypeScript'</span>, <span class="string">'Next.js'</span>],
+        <span class="variable">backend</span>: [<span class="string">'Node.js'</span>, <span class="string">'Express'</span>, <span class="string">'MongoDB'</span>],
+        <span class="variable">tools</span>: [<span class="string">'Docker'</span>, <span class="string">'Git'</span>, <span class="string">'Figma'</span>]
+    },
+    <span class="variable">experience</span>: <span class="number">3 <span class="comment">// года</span></span>
+};
+
+<span class="comment">// Специализация в Telegram разработке</span>
+<span class="keyword">const</span> <span class="variable">telegramExpertise</span> = {
+    <span class="variable">bots</span>: <span class="keyword">true</span>,
+    <span class="variable">miniApps</span>: <span class="keyword">true</span>,
+    <span class="variable">payments</span>: <span class="keyword">true</span>
+};</pre>
+    </div>
+</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="section">
+        <div class="container">
+            <h2 class="section-title">Услуги</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                    <h3 class="service-title">Telegram боты</h3>
+                    <p class="service-description">
+                        Создание многофункциональных Telegram ботов с интеграцией платежных систем, 
+                        баз данных и внешних API. От простых ботов до сложных CRM-систем.
+                    </p>
+                    <div class="service-tech">
+                        <span class="tech-tag">Puregram</span>
+                        <span class="tech-tag">MongoDB</span>
+                        <span class="tech-tag">Payment API</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="service-title">Telegram Mini Apps</h3>
+                    <p class="service-description">
+                        Разработка интерактивных мини-приложений внутри Telegram с современным UI/UX. 
+                        Полноценные SPA-приложения с интеграцией в Telegram WebApp API.
+                    </p>
+                    <div class="service-tech">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">TypeScript</span>
+                        <span class="tech-tag">WebApp API</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fab fa-vk"></i>
+                    </div>
+                    <h3 class="service-title">Боты для ВКонтакте</h3>
+                    <p class="service-description">
+                        Разработка умных ботов для ВК с интеграцией в сообщества. Автоматизация ответов, 
+                        модерация, рассылки, игры и викторины. Полная интеграция с API ВКонтакте.
+                    </p>
+                    <div class="service-tech">
+                        <span class="tech-tag">VK API</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">LongPoll</span>
+                        <span class="tech-tag">Callback API</span>
+                        <span class="tech-tag">MongoDB</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3 class="service-title">Backend разработка</h3>
+                    <p class="service-description">
+                        Создание производительных backend-систем на Node.js. 
+                        REST API, аутентификация, работа с базами данных, кэширование.
+                    </p>
+                    <div class="service-tech">
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">Express</span>
+                        <span class="tech-tag">Fastify</span>
+                        <span class="tech-tag">MongoDB</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="service-title">Frontend разработка</h3>
+                    <p class="service-description">
+                        Создание интерактивных пользовательских интерфейсов на React. 
+                        Адаптивная вёрстка, state management, работа с API.
+                    </p>
+                    <div class="service-tech">
+                        <span class="tech-tag">Figma</span>
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">TypeScript</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="service-title">Интеграция ИИ</h3>
+                    <p class="service-description">
+                        Внедрение искусственного интеллекта в ваши проекты: чат-боты, 
+                        анализ данных, генерация контента, автоматизация процессов.
+                    </p>
+                    <div class="service-tech">
+                        <span class="tech-tag">OpenAI API</span>
+                        <span class="tech-tag">Vercel AI SDK</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="service-title">SEO и продвижение</h3>
+                    <p class="service-description">
+                        Вывод сайтов в топ поисковых систем. Оптимизация скорости, 
+                        технический аудит, работа с семантическим ядром.
+                    </p>
+                    <div class="service-tech">
+                        <span class="tech-tag">SEO</span>
+                        <span class="tech-tag">Google Analytics</span>
+                        <span class="tech-tag">Яндекс.Метрика</span>
+                        <span class="tech-tag">Оптимизация</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fab fa-linux"></i>
+                    </div>
+                    <h3 class="service-title">Администрирование Linux</h3>
+                    <p class="service-description">
+                        Настройка и обслуживание Linux серверов. Оптимизация производительности, 
+                        безопасность, резервное копирование, мониторинг и автоматизация рутинных задач.
+                    </p>
+                    <div class="service-tech">
+                        <span class="tech-tag">Ubuntu</span>
+                        <span class="tech-tag">Debian</span>
+                        <span class="tech-tag">CentOS (& RedOS)</span>
+                        <span class="tech-tag">Bash</span>
+                        <span class="tech-tag">Docker</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3 class="service-title">Подбор хостинга</h3>
+                    <p class="service-description">
+                        Помощь в выборе оптимального хостинга под ваши задачи и бюджет. 
+                        Сравнение тарифов, настройка серверов, миграция проектов между хостингами.
+                    </p>
+                    <div class="service-tech">
+                        <span class="tech-tag">VPS</span>
+                        <span class="tech-tag">Shared</span>
+                        <span class="tech-tag">Cloud</span>
+                        <span class="tech-tag">Dedicated</span>
+                        <span class="tech-tag">CDN</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section tech-section">
+        <div class="container">
+            <h2 class="section-title">Технологии</h2>
+            <p class="hero-description" style="text-align: center; max-width: 700px; margin: 0 auto 2rem;">
+                В моём арсенале современные инструменты для создания производительных и масштабируемых приложений
+            </p>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <img src="https://cdn.worldvectorlogo.com/logos/typescript.svg" alt="TypeScript" class="tech-icon">
+                    <span class="tech-name">TypeScript</span>
+                </div>
+                <div class="tech-item">
+                    <img src="https://cdn.worldvectorlogo.com/logos/react-2.svg" alt="React" class="tech-icon">
+                    <span class="tech-name">React</span>
+                </div>
+                <div class="tech-item">
+                    <img src="https://cdn.worldvectorlogo.com/logos/nodejs-1.svg" alt="Node.js" class="tech-icon">
+                    <span class="tech-name">Node.js</span>
+                </div>
+                <div class="tech-item">
+                    <img src="https://cdn.worldvectorlogo.com/logos/express-109.svg" alt="Express" class="tech-icon">
+                    <span class="tech-name">Express</span>
+                </div>
+                <div class="tech-item">
+                    <img src="https://cdn.worldvectorlogo.com/logos/fastify.svg" alt="Fastify" class="tech-icon">
+                    <span class="tech-name">Fastify</span>
+                </div>
+                <div class="tech-item">
+                    <img src="https://cdn.worldvectorlogo.com/logos/mongodb-icon-1.svg" alt="MongoDB" class="tech-icon">
+                    <span class="tech-name">MongoDB</span>
+                </div>
+                <div class="tech-item">
+                    <img src="https://cdn.worldvectorlogo.com/logos/telegram-1.svg" alt="Telegram API" class="tech-icon">
+                    <span class="tech-name">Telegram API</span>
+                </div>
+                <div class="tech-item">
+                    <img src="https://cdn.worldvectorlogo.com/logos/1c-company.svg" alt="1C" class="tech-icon">
+                    <span class="tech-name">1C</span>
+                </div>
+                <div class="tech-item">
+                    <img src="https://cdn.worldvectorlogo.com/logos/visual-studio-code-1.svg" alt="VS Code" class="tech-icon">
+                    <span class="tech-name">VS Code</span>
+                </div>
+                <div class="tech-item">
+                    <img src="https://cdn.worldvectorlogo.com/logos/figma-icon.svg" alt="Figma" class="tech-icon">
+                    <span class="tech-name">Figma</span>
+                </div>
+                <div class="tech-item">
+                    <img src="https://cdn.worldvectorlogo.com/logos/ubuntu-4.svg" alt="Ubuntu" class="tech-icon">
+                    <span class="tech-name">Ubuntu</span>
+                </div>
+                <div class="tech-item">
+                    <img src="https://cdn.worldvectorlogo.com/logos/debian-2.svg" alt="Debian" class="tech-icon">
+                    <span class="tech-name">Debian</span>
+                </div>
+                <div class="tech-item">
+                    <img src="https://cdn.worldvectorlogo.com/logos/docker.svg" alt="Docker" class="tech-icon">
+                    <span class="tech-name">Docker</span>
+                </div>
+                <div class="tech-item">
+                    <img src="https://cdn.worldvectorlogo.com/logos/vk-1.svg" alt="VK API" class="tech-icon">
+                    <span class="tech-name">VK API</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="section">
+        <div class="container">
+            <h2 class="section-title">Мои проекты</h2>
+            <p class="hero-description" style="text-align: center; max-width: 700px; margin: 0 auto 2rem;">
+                Некоторые из моих проектов
+            </p>
+            <div class="projects-list">
+                <div class="project-item">
+                    <h3 class="project-title">ITS33</h3>
+                    <p class="project-description">
+                        Комплексный веб-проект для IT-компании. Включает лендинг, интернет-магазин, блог, административную панель и API.
+                    </p>
+                    <div class="service-tech">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">Express</span>
+                        <span class="tech-tag">MongoDB</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://its33.ru" target="_blank" class="project-link">
+                            <i class="fas fa-external-link-alt"></i> Сайт
+                        </a>
+                    </div>
+                </div>
+                <div class="project-item">
+                    <h3 class="project-title">TeeVPN</h3>
+                    <p class="project-description">
+                        Telegram бот для управления VPN сервисом с интеграцией платежных систем и автоматической выдачей доступов.
+                    </p>
+                    <div class="service-tech">
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">Puregram</span>
+                        <span class="tech-tag">MongoDB</span>
+                        <span class="tech-tag">ЮКасса</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://t.me/teevpn_bot" target="_blank" class="project-link">
+                            <i class="fab fa-telegram"></i> Бот
+                        </a>
+                    </div>
+                </div>
+                <div class="project-item">
+                    <h3 class="project-title">TeeVPN FREE</h3>
+                    <p class="project-description">
+                        Бесплатная (и опенсорсная) версия Telegram бота для управления VPN сервисом.
+                    </p>
+                    <div class="service-tech">
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">Puregrma</span>
+                        <span class="tech-tag">MongoDB</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://t.me/teevpn_free_bot" target="_blank" class="project-link">
+                            <i class="fab fa-telegram"></i> Бот
+                        </a>
+                        <a href="https://github.com/Mvory9/teevpn-free" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i> Код
+                        </a>
+                    </div>
+                </div>
+                <div class="project-item">
+                    <h3 class="project-title">Time Converter TS</h3>
+                    <p class="project-description">
+                        Утилита для конвертации единиц времени между собой.
+                    </p>
+                    <div class="service-tech">
+                        <span class="tech-tag">TypeScript</span>
+                        <span class="tech-tag">Node.js</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/Mvory9/time-converter-ts" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i> Код
+                        </a>
+                    </div>
+                </div>
+                <div class="project-item">
+                    <h3 class="project-title">Bcrypt Hasher</h3>
+                    <p class="project-description">
+                        Утилита для шифрования паролей с использованием Bcrypt на React. Весь код в клиентской части приложения.
+                    </p>
+                    <div class="service-tech">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Bcrypt.js</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://fluxnetru.github.io/bcrypt-hasher" target="_blank" class="project-link">
+                            <i class="fas fa-external-link-alt"></i> Сайт
+                        </a>
+                        <a href="https://github.com/fluxnetru/bcrypt-hasher" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i> Код
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section contact-section">
+        <div class="container">
+            <h2 class="section-title">Контакты</h2>
+            <p class="hero-description" style="text-align: center; max-width: 700px; margin: 0 auto 2rem;">
+                Готов обсудить ваш проект или ответить на вопросы. Свяжитесь со мной удобным способом:
+            </p>
+            <div class="contact-methods">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                    <h3 class="contact-title">Telegram</h3>
+                    <p class="contact-info">
+                        <a href="https://t.me/rnbvnb" target="_blank" class="contact-link">@rnbvnb</a>
+                    </p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <h3 class="contact-title">GitHub</h3>
+                    <p class="contact-info">
+                        <a href="https://github.com/Mvory9" target="_blank" class="contact-link">Mvory9</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <a href="#" class="footer-logo">Kochedykov<span></span></a>
+                <div class="footer-links">
+                    <a href="#about" class="footer-link">Обо мне</a>
+                    <a href="#services" class="footer-link">Услуги</a>
+                    <a href="#projects" class="footer-link">Проекты</a>
+                    <a href="#contact" class="footer-link">Контакты</a>
+                </div>
+                <div class="social-links">
+                    <a href="https://t.me/rnbvnb" target="_blank" class="social-link">
+                        <i class="fab fa-telegram"></i>
+                    </a>
+                    <a href="https://github.com/Mvory9" target="_blank" class="social-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+                <p class="copyright">© 2025 Егор Кочедыков. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="easter-egg">
+        <i class="fas fa-code"></i>
+        <div class="tooltip">Нажми для пасхалки!</div>
+    </div>
+
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('open');
+            navLinks.classList.toggle('active');
+        });
+        
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('open');
+                navLinks.classList.remove('active');
+            });
+        });
+        
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        const easterEgg = document.querySelector('.easter-egg');
+        let clickCount = 0;
+        const themes = [
+            { name: "Dracula", primary: "#bd93f9", secondary: "#ff79c6", dark: "#282a36" },
+            { name: "Nord", primary: "#5e81ac", secondary: "#d08770", dark: "#2e3440" },
+            { name: "Cyberpunk", primary: "#ff2a6d", secondary: "#05d9e8", dark: "#0d0221" },
+            { name: "Default", primary: "#6e48aa", secondary: "#9d50bb", dark: "#1a1a2e" }
+        ];
+        let currentTheme = 3;
+
+        easterEgg.addEventListener('click', () => {
+            clickCount++;
+            
+            if (clickCount === 1) {
+                currentTheme = (currentTheme + 1) % themes.length;
+                const theme = themes[currentTheme];
+                
+                document.documentElement.style.setProperty('--primary', theme.primary);
+                document.documentElement.style.setProperty('--secondary', theme.secondary);
+                document.documentElement.style.setProperty('--dark', theme.dark);
+                document.documentElement.style.setProperty('--accent', theme.secondary);
+                
+                const messages = [
+                    "sudo rm -rf /* — не пробуй это дома!",
+                    "Нет багов — есть недокументированные фичи",
+                    "01010100 01101000 01100001 01101110 01101011 01110011 00100001", // "Thanks!" в бинарном коде
+                    "Быстро, дешево, качественно — выбери два",
+                    "Это не баг, это фича!",
+                    "У меня 99 проблем, но 127.0.0.1 не одна из них",
+                    "Комментарии — это ложь, которую разработчики оставляют друг для друга",
+                    "Сначала работающий код, потом оптимизация. Или не оптимизация",
+                    "git commit -m 'Фикс фикса предыдущего фикса'",
+                    "Всё работает? Значит, пора рефакторить!",
+                    "Чем сложнее баг, тем эпичнее история для тимлида",
+                    "404 — Остроумие не найдено",
+                    "Я не ленивый, я энергоэффективный",
+                    "sudo make me a sandwich",
+                    "Один бинарник — хорошо, а два — distributed system",
+                    "Мой код проходит все тесты... которые я написал",
+                    "Хочешь мира — готовься к merge conflict'ам",
+                    "Бесконечный цикл: while(true) { coffee++ }",
+                    "Код без багов — это код, который никто не использует",
+                    "Программирование — это 10% код, 90% гугление",
+                    "Лучший код — тот, который не нужно писать",
+                    "Ctrl+C, Ctrl+V — основа основ",
+                    "Я не волшебник, я только учусь async/await",
+                    "Ошибка в строке NaN",
+                    "Компьютеры быстры — программисты медленны",
+                    "Если бы у меня был ₽ за каждый баг, я бы чинил их сам",
+                    "Тише едешь — дальше будешь... в backlog'е",
+                    "Паттерны проектирования — это когда ты знаешь, где искать виноватого",
+                    "Главное — чтобы в продакшене работало",
+                    "Stack Overflow — мой второй стек",
+                    "Асинхронно? Синхронно? Главное — дорого!",
+                    "Код ревью: 'А давай перепишем всё на Rust?'",
+                    "Знаете ли вы? Первый 'баг' был реальным мотыльком в реле",
+                    "Факт: термин 'демо' появился, когда программисты демонстрировали ошибки",
+                    "// TODO: Написать понятный комментарий",
+                    "Я не прокрастинирую — я собираю технический долг",
+                    "null !== undefined, но в продакшене — одинаково больно",
+                    "Хороший программист всегда оставляет TODO для будущего себя",
+                    "Война и мир — это не роман, это мой package-lock.json",
+                    "Мой любимый HTTP статус — 418 I'm a teapot",
+                    "Функция работает? Не трогай!",
+                    'console.log("Почему это не работает?");',
+                    "Лучшая документация — это отсутствие документации",
+                    "Я не дедлайны пропускаю, я их итеративно переношу",
+                    "Сначала собираем требования, потом их игнорируем",
+                    "Если нельзя, но очень хочется — нужно добавить @ts-ignore",
+                    "Веб-разработка: где 'это должно быть быстро' встречается с 5MB JavaScript"
+                ];
+                
+                const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+                alert(`🎉 Тема изменена на ${theme.name}!\n\n${randomMsg}`);
+                clickCount = 0;
+            }
+        });
+        
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.service-card, .project-card, .tech-item, .contact-card');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+        
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.service-card, .project-card, .tech-item, .contact-card').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            });
+            
+            setTimeout(animateOnScroll, 500);
+        });
+        
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
+</body>
+</html>
